@@ -1,4 +1,6 @@
-from tkinter import Tk, Canvas, PhotoImage, Label, Entry, Button, END
+from tkinter import Tk, Canvas, PhotoImage, Label, Entry, Button, END, messagebox
+
+
 # ---------------------------- PASSWORD GENERATOR ------------------------------- #
 
 # ---------------------------- SAVE PASSWORD ------------------------------- #
@@ -9,11 +11,18 @@ def save():
     login = login_id_input.get()
     passkey = password_input.get()
 
-    with open("data.txt", "a") as data_file:
-        data_file.write(f"{site} | {login} | {passkey}\n")
-        website_input.delete(0, END)
-        password_input.delete(0, END)
-        website_input.focus()
+    if len(site) == 0 or len(passkey) == 0:
+        messagebox.showinfo(title="Oops", message="Please make sure you haven't left any fields empty.")
+    else:
+        is_ok = messagebox.askokcancel(title=site, message=f"These are the details entered: \nLogin: {login} "
+                                                           f"\nPassword: {password} \nIs it okay to save?")
+
+        if is_ok:
+            with open("data.txt", "a") as data_file:
+                data_file.write(f"{site} | {login} | {passkey}\n")
+                website_input.delete(0, END)
+                password_input.delete(0, END)
+                website_input.focus()
 
 
 # ---------------------------- UI SETUP ------------------------------- #
