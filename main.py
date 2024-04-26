@@ -7,8 +7,10 @@ import json
 
 
 def generate_password():
-    letters = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v',
-               'w', 'x', 'y', 'z', 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R',
+    letters = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u',
+               'v',
+               'w', 'x', 'y', 'z', 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q',
+               'R',
                'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z']
     numbers = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9']
     symbols = ['!', '#', '$', '%', '&', '(', ')', '*', '+']
@@ -26,6 +28,7 @@ def generate_password():
 
 
 # ---------------------------- SAVE PASSWORD ------------------------------- #
+
 
 def save():
     """used to save data to a text file"""
@@ -59,6 +62,24 @@ def save():
             website_input.focus()
 
 
+# Search Function
+
+def find_password():
+    website_name = website_input.get()
+    try:
+        with open("data.json", "r") as data_file:
+            data = json.load(data_file)
+    except FileNotFoundError:
+        messagebox.showinfo(title="Error", message="No data file found")
+    else:
+        if website_name in data:
+            login_detail = data[website_name]["login"]
+            passkey = data[website_name]["password"]
+            messagebox.showinfo(title=website_name, message=f"Login: {login_detail}\nPassword: {passkey}")
+        else:
+            messagebox.showinfo(title="Oops", message=f"No details for {website_name} exists")
+
+
 # ---------------------------- UI SETUP ------------------------------- #
 
 # window
@@ -88,7 +109,7 @@ password.grid(row=3, column=0)
 # Entries
 
 website_input = Entry()
-website_input.grid(row=1, column=1, columnspan=2, sticky="ew")
+website_input.grid(row=1, column=1, sticky="ew")
 website_input.focus()
 
 login_id_input = Entry()
@@ -99,6 +120,9 @@ password_input = Entry()
 password_input.grid(row=3, column=1, sticky="ew")
 
 # Buttons
+
+search_button = Button(text="Search", command=find_password)
+search_button.grid(row=1, column=2, sticky="ew")
 
 generate_password_button = Button(text="Generate Password", command=generate_password)
 generate_password_button.grid(row=3, column=2, sticky="ew")
